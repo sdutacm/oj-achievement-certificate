@@ -23,6 +23,17 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    host: '0.0.0.0',
+    proxy: {
+      '/onlinejudge3/api': {
+        target: 'https://oj.sdutacm.cn',
+        changeOrigin: true,
+        secure: false,
+        cookieDomainRewrite: '',
+      },
+    },
+  },
   experimental: {
     renderBuiltUrl(filename) {
       let cdnUrl = process.env.CDN_URL || '/oj-certificate';
@@ -31,5 +42,6 @@ export default defineConfig({
       }
       return `${cdnUrl}${filename}`;
     },
-  }
+  },
+
 })

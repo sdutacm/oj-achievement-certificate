@@ -20,14 +20,15 @@
     min-width: 1123px;
     aspect-ratio: 1.414 / 1;
     overflow: hidden;
-    background-color: #fff;
+    color-scheme: light !important;
+    background-color: #fff !important;
     display: flex;
     justify-content: center;
     align-items: center;
     /* margin-top: 40px; */
 }
 
-.certificate-border {
+.certificate-body {
     width: 100%;
     max-width: 1063px;
     aspect-ratio: 1.414 / 1;
@@ -86,26 +87,17 @@
     text-indent: 2em;
 }
 
-
-.achievement {
-    width: 660px;
-    height: 360px;
-    /* background-color: #666; */
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 5px;
-    margin-top: 20px;
-    text-align: start;
+.rank{
+    font-size: 60px;
+    text-align: center;
+    padding: 50px;
+    padding-top: 60px;
 }
 
-
-.achievement_item {
-    font-size: 18px;
-    margin: 3px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+.comp-title{
+    font-size: 25px;
 }
+
 
 .right .top {
     width: 340px;
@@ -198,38 +190,3 @@
     right: 25px;
 }
 
-.achievement-count{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding-top: 30px;
-    font-size: 14px;
-}
-
-.achievement-count .total-achieved-value{
-    margin-left: 8px;
-    font-size: 18px;
-    font-weight: bold;
-    margin-right: 35px;
-}
-
-.total-achieved-rophy-board{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.total-achieved-rophy{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 16px;
-}
-
-.rophy-count{
-    font-size: 18px;
-    font-weight: bold;
-    margin-left: 8px;
-}

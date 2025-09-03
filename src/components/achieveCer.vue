@@ -1,7 +1,7 @@
 <template>
     <div class="container" v-Loading="Loading" element-loading-background="var(--bg-color)">
         <div v-for="(page, pageIndex) in pagedAchievements" :key="pageIndex" class="certificate-container">
-            <div class="certificate-border">
+            <div class="certificate-body">
                 <div class="content">
                     <div class="title">
                         <p>获奖证书</p>
@@ -142,8 +142,8 @@
     async function ojLogin() {
         try {
             const res = await req.post("/login", {
-                loginName: undefined,
-                password: undefined
+                loginName: '1816140905@qq.com',
+                password: 'wzhzjq2xx'
             });
             console.log("模拟登录成功:", res);
             return true;
@@ -236,5 +236,5 @@
 </script>
 
 <style scoped>
-    @import url(../assets/certificate.css);
+    @import url(../assets/achieveCer.css);
 </style>

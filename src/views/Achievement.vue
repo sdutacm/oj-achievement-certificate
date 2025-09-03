@@ -22,7 +22,7 @@
 
 <script setup>
     import { ref, reactive, onMounted } from "vue";
-    import certificate from '@/components/certificate.vue'
+    import certificate from '@/components/achieveCer.vue'
     import Menu from '@/components/menu.vue'
     import media from '@/components/media.vue';
     import fallback from "@/components/fallback.vue";

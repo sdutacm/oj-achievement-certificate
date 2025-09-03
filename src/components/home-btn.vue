@@ -1,6 +1,6 @@
 <template>
     <div class="homeBtn">
-        <el-button class="btnCard" @click="goAchievement" plain>
+        <el-button class="btnCard" @click="router.push('/achievement')" plain>
             <div class="btnContent">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                     fill="currentColor">
@@ -11,7 +11,7 @@
                 <p>Get certificates of achievements</p>
             </div>
         </el-button>
-        <el-button class="btnCard" @click="goAchievement" plain disabled>
+        <el-button class="btnCard" @click="router.push('/sets')" plain disabled>
             <div class="btnContent">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                     fill="currentColor">
@@ -21,7 +21,7 @@
                 <h2>Sets</h2>
                 <p>Get certificates of Sets</p>
             </div>
-        </el-button><el-button class="btnCard" @click="goAchievement" plain disabled>
+        </el-button><el-button class="btnCard" @click="router.push('/competition')" plain>
             <div class="btnContent">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                     fill="currentColor">
@@ -40,9 +40,6 @@
     import { useRouter } from 'vue-router';
     const router = useRouter();
 
-    function goAchievement() {
-        router.push('/achievement');
-    }
 </script>
 
 <style scoped>
