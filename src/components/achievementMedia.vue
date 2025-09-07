@@ -175,5 +175,5 @@
 </script>
 
 <style scoped>
-    @import url(../assets/media.css);
+    @import url(../assets/achievementMedia.css);
 </style>

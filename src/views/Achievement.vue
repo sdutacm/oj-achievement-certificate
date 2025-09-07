@@ -24,7 +24,7 @@
     import { ref, reactive, onMounted } from "vue";
     import certificate from '@/components/achieveCer.vue'
     import Menu from '@/components/menu.vue'
-    import media from '@/components/media.vue';
+    import media from '@/components/achievementMedia.vue';
     import fallback from "@/components/fallback.vue";
     const certificateRef = ref(null);
     const hiddenCertificateRef = ref(null);
