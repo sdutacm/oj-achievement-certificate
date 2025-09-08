@@ -21,9 +21,14 @@
     import html2canvas from "html2canvas";
     import { jsPDF } from "jspdf";
     import { toRefs } from "vue";
+    import JSZip from "jszip";
+    import { saveAs } from "file-saver";
+    import { useRoute } from "vue-router";
 
+    const route = useRoute();
     const props = defineProps({
-        certificateRef: Object
+        certificateRef: Object,
+        nickname: Array,
     });
 
     const { certificateRef } = toRefs(props);
@@ -36,7 +41,7 @@
         const pages = target.querySelectorAll('.certificate-container');
         const canvases = [];
 
-        // 为每个页面创建canvas
+        // 为每个页面创建canvas 
         for (const page of pages) {
             const rawCanvas = await html2canvas(page, {
                 scale: 3,
@@ -67,42 +72,72 @@
         const canvases = await captureCertificate();
         if (!canvases) return;
 
-        canvases.forEach((canvas, index) => {
-            const link = document.createElement("a");
-            link.href = canvas.toDataURL("image/png");
-            link.download = `certificate-${index + 1}.png`;
-            link.click();
-        });
+        if (route.name === "Achievement") {
+            canvases.forEach((canvas, index) => {
+                const link = document.createElement("a");
+                link.href = canvas.toDataURL("image/png");
+                link.download = `certificate-${index + 1}.png`;
+                link.click();
+            });
+        } else {
+            const zip = new JSZip();
+
+            canvases.forEach((canvas, index) => {
+                const imgData = canvas.toDataURL("image/png");
+                const base64Data = imgData.split(",")[1];
+                zip.file(`${props.nickname}.png`, base64Data, { base64: true });
+            });
+
+            const content = await zip.generateAsync({ type: "blob" });
+            saveAs(content, "certificates.zip");
+        }
     }
 
     async function downloadAsPDF() {
         const canvases = await captureCertificate();
         if (!canvases) return;
 
-        const pdf = new jsPDF("l", "mm", "a4");
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
+        if (route.name === "Achievement") {
+            const pdf = new jsPDF("l", "mm", "a4");
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
 
-        canvases.forEach((canvas, index) => {
-            if (index > 0) {
-                pdf.addPage();
+            canvases.forEach((canvas, index) => {
+                if (index > 0) {
+                    pdf.addPage();
+                }
+                const imgData = canvas.toDataURL("image/png");
+                pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
+            });
+            pdf.save("certificate.pdf");
+        } else {
+            const zip = new JSZip();
+
+            for (let i = 0; i < canvases.length; i++) {
+                const pdf = new jsPDF("l", "mm", "a4");
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+
+                const imgData = canvases[i].toDataURL("image/png");
+                pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
+                const pdfBlob = pdf.output("blob");
+                zip.file(`${props.nickname[i]}.pdf`, pdfBlob);
             }
-            const imgData = canvas.toDataURL("image/png");
-            pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
-        });
 
-        pdf.save("certificate.pdf");
+            const content = await zip.generateAsync({ type: "blob" });
+            saveAs(content, `certificates.zip`);
+        }
     }
-    
+
 </script>
 
 <style>
-.downItem svg {
-    fill: currentColor;
-    padding-right: 5px;
-}
+    .downItem svg {
+        fill: currentColor;
+        padding-right: 5px;
+    }
 
-.downItem{
-    transition: all .3s ease;
-}
+    .downItem {
+        transition: all .3s ease;
+    }
 </style>

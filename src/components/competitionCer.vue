@@ -1,48 +1,49 @@
 <template>
     <div class="container" v-Loading="Loading" element-loading-background="var(--bg-color)">
-        <div v-if="competitions === undefined" style="color: var(--font-color);">You haven't joined any competitions yet.</div>
-        <div class="certificate-container" v-for="(comp, index) in competitions" :key="index">
-            <div class="certificate-body">
-                <div class="content">
-                    <div class="title">
-                        <p>获奖证书</p>
-                        <h1>Certificate of Competition</h1>
+        <div v-if="competitions.length == 0" style="color: var(--font-color);">You haven't joined this competition.</div>
+        <div v-for="(comp, index) in competitions" :key="index">
+            <div class="certificate-container">
+                <div class="certificate-body">
+                    <div class="content">
+                        <div class="title">
+                            <p>获奖证书</p>
+                            <h1>Certificate of Competition</h1>
+                        </div>
+
+                        <div class="user">
+                            <p>恭喜 / Congratulation</p>
+                            <div class="nickname">{{ comp.nickname }}</div>
+                            <p>获得 / Acquire</p>
+                            <div class="rank">第 {{ comp.rank }} 名</div>
+                        </div>
+
+                        <div class="comp-title">{{ comp.title }}</div>
+
                     </div>
 
-                    <div class="user"> 
-
-                        <p>恭喜 / Congratulation</p>
-                        <div class="nickname">{{ comp.nickname }}</div>
-                        <p>获得 / Acquire</p>
-                        <div class="rank">第 {{ comp.rank }} 名</div>
+                    <div class="footer">
+                        <div class="certificate-information">
+                            Date: <strong>{{ comp.date }}</strong><br />
+                            Certificate ID: <strong>{{ CertificateID }}{{ index }}</strong>
+                        </div>
                     </div>
 
-                    <div class="comp-title">{{ comp.title }}</div>
-
-                </div>
-
-                <div class="footer">
-                    <div class="certificate-information">
-                        Date: <strong>{{ comp.date }}</strong><br />
-                        Certificate ID: <strong>{{ CertificateID }}{{ index }}</strong>
+                    <div class="left">
+                        <div class="top"></div>
+                        <div class="bottom"></div>
+                        <div class="mid-bottom"></div>
+                        <div class="mid-top"></div>
                     </div>
-                </div>
 
-                <div class="left">
-                    <div class="top"></div>
-                    <div class="bottom"></div>
-                    <div class="mid-bottom"></div>
-                    <div class="mid-top"></div>
-                </div>
-
-                <div class="right">
-                    <div class="top"></div>
-                    <div class="bottom"></div>
-                    <div class="logo">
-                        <img v-if="Logo === 'zzcz'" src="@/assets/zzcz_logo.png" alt="Logo_zzcz"
-                            crossorigin="anonymous" />
-                        <img v-else src="@/assets/sdutacm_logo_colorful.png" alt="Default Logo"
-                            crossorigin="anonymous" />
+                    <div class="right">
+                        <div class="top"></div>
+                        <div class="bottom"></div>
+                        <div class="logo">
+                            <img v-if="Logo === 'zzcz'" src="@/assets/zzcz_logo.png" alt="Logo_zzcz"
+                                crossorigin="anonymous" />
+                            <img v-else src="@/assets/sdutacm_logo_colorful.png" alt="Default Logo"
+                                crossorigin="anonymous" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -54,7 +55,7 @@
     import { ref, onMounted, watch } from "vue";
     import req from "@/utils/req.js";
     const CertificateID = Date.now().toString();
-    const competitions = ref();
+    const competitions = ref([]);
     const userId = ref(0);
     const isLogin = ref(undefined);
     const Logo = ref('default');
@@ -62,6 +63,11 @@
     const permission = ref(0); // 0 为普通用户
     const compTitle = ref("");
     const compDate = ref("");
+
+    const props = defineProps({
+        competitionId: String,
+    });
+    const competitionId = Number(props.competitionId);
 
     function updateLogo() {
         const params = new URLSearchParams(window.location.search)
@@ -86,8 +92,8 @@
     async function ojLogin() {
         try {
             const res = await req.post("/login", {
-                loginName: 'acm_admin',
-                password: 'A5C0M6&sdut__oj'
+                loginName: '3214984261@qq.com',
+                password: 'QWERzxcv123456'
             });
             console.log("模拟登录成功:", res);
             return true;
@@ -97,22 +103,24 @@
         }
     }
 
-// 个人用户查看
+    // 个人用户查看
     async function getUserDetail() {
         try {
             const data = await req.post("/getUserDetail", {
                 userId: userId.value
             });
             competitions.value = [];
-            if (data.ratingHistory) {
+            if (data) {
                 data.ratingHistory.forEach((item) => {
-                    competitions.value.push({
-                        competitionId: item.competition.competitionId,
-                        title: item.competition.title,
-                        rank: item.rank,
-                        date: item.date,
-                        nickname: item.username,
-                    });
+                    if (item.competition.competitionId === competitionId) {
+                        competitions.value.push({
+                            competitionId: item.competition.competitionId,
+                            title: item.competition.title,
+                            rank: item.rank,
+                            date: item.date,
+                            nickname: data.username
+                        });
+                    }
                 });
             } else {
                 competitions.value = undefined;
@@ -122,23 +130,23 @@
         }
     }
 
-// 管理员查看
-    async function getCompetitionDetail(){
-        try{
+    // 管理员查看
+    async function getCompetitionDetail() {
+        try {
             const data = await req.post("/getCompetitionDetail", {
-                competitionId:50
+                competitionId: competitionId
             });
             compTitle.value = data.title;
             compDate.value = data.startAt.slice(0, 10);
-        }catch (err) {
+        } catch (err) {
             console.error("获取比赛信息失败", err);
         }
     }
 
     async function getCompetitionRanklist() {
-        try{
+        try {
             const data = await req.post("/getCompetitionRanklist", {
-                competitionId:50
+                competitionId: competitionId
             });
             competitions.value = [];
             data.rows.forEach((item) => {
@@ -149,12 +157,10 @@
                     date: compDate.value,
                 });
             });
-        }catch (err) {
+        } catch (err) {
             console.error("获取比赛榜单失败", err);
         }
     }
-
-
 
 
     onMounted(async () => {
@@ -167,21 +173,21 @@
         } else {
             isLogin.value = true;
         }
-        if(permission.value != 0){
+        if (permission.value != 0) {
             await getCompetitionDetail();
             await getCompetitionRanklist();
-        }else{
+        } else {
             await getUserDetail();
         }
-        
         Loading.value = false;
     });
 
     const emit = defineEmits()
 
-    watch([isLogin], () => {
+    watch([isLogin, competitions], () => {
         emit("updateData", {
-            isLogin: isLogin.value
+            isLogin: isLogin.value,
+            nickname: competitions.value.map(a => a.nickname),
         })
     }, { immediate: true }) 
 </script>

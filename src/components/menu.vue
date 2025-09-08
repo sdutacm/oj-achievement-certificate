@@ -9,9 +9,9 @@
                     </svg>
                 </router-link>
             </div>
-            <div class="title" v-if="route.name !== 'Home'">
-                SDUT OJ Achievement Certificate
-            </div>
+            <div class="title" v-if="route.name === 'Achievement'">SDUT OJ Achievement Certificate</div>
+            <div class="title" v-if="route.name === 'Competition'">SDUT OJ Competition Certificate</div>
+            <div class="title" v-if="route.name === 'Sets'">SDUT OJ Sets Certificate</div>
             <div class="menu-button">
                 <div class="github">
                     <a href="https://github.com/sdutacm/oj-achievement-certificate" target="_blank">
@@ -21,7 +21,7 @@
                         </svg>
                     </a>
                 </div>
-                <div class="download" ref="menuWrapper" v-if="route.name !== 'Home'">
+                <div class="download" ref="menuWrapper" v-if="route.name !== 'Home'&& route.name != 'Competitions'">
                     <div name="dropdown">
                         <el-dropdown>
                             <span class="el-dropdown-link">
@@ -32,7 +32,7 @@
                                 </svg>
                             </span>
                             <template #dropdown>
-                                <dropdown :certificateRef="certificateRef" />
+                                <dropdown :certificateRef="certificateRef" :nickname="props.nickname"/>
                             </template>
                         </el-dropdown>
 
@@ -53,7 +53,8 @@
     const showDownloadModal = ref(false);
     const menuWrapper = ref(null);
     const props = defineProps({
-        certificateRef: Object
+        certificateRef: Object,
+        nickname: Array,
     });
 
     function handleClickOutside(e) {
