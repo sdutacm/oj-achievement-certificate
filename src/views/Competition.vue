@@ -1,6 +1,9 @@
 <template>
     <div class="AppContainer">
-        <Menu :certificateRef="certificateRef" :nickname="certificateData.nickname"/>
+        <Menu :certificateRef="certificateRef" 
+        :realName="certificateData.realName"
+        :title="certificateData.title"
+        :nickname="certificateData.nickname"/>
         <fallback v-if="certificateData.isLogin === false" class="flexCenter" />
         <certificate ref="certificateRef" class="certificate flexCenter" v-show="certificateData.isLogin"
             @updateData="handleUpdate" :competitionId="competitionId" />
@@ -20,6 +23,8 @@
 
     const certificateData = reactive({
         nickname: [],
+        realName: [],
+        title: "",
         isLogin: false,
     })
 

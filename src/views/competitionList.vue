@@ -1,17 +1,10 @@
 <template>
     <div class="AppContainer">
         <Menu />
-        <el-table  
-        v-Loading="Loading"
-        v-show="!Loading"
-        element-loading-background="var(--bg-color)" 
-        :data="competitions" 
-        :show-header="false" 
-        @row-click="handleRowClick" 
-        show-overflow-tooltip
-        class="flexCenter">
+        <el-table v-Loading="Loading" v-show="!Loading" element-loading-background="var(--bg-color)"
+            :data="competitions" :show-header="false" @row-click="handleRowClick">
             <el-table-column prop="title" />
-            <el-table-column prop="date" width="180"/>
+            <el-table-column prop="date" class-name="time" :width="columnWidth" />
         </el-table>
         <footer>© 2008-2025 SDUTACM. All Rights Reserved.</footer>
     </div>
@@ -25,6 +18,7 @@
     const router = useRouter();
     const competitions = ref([]);
     const Loading = ref(true);
+    const columnWidth = ref(180);
 
     async function getCompetitionList() {
         try {
@@ -52,6 +46,10 @@
     onMounted(async () => {
         Loading.value = true;
         await getCompetitionList();
+        columnWidth.value = window.innerWidth < 768 ? 110 : 180
+        window.addEventListener('resize', () => {
+            columnWidth.value = window.innerWidth < 768 ? 110 : 180
+        })
         Loading.value = false;
     })
 </script>
@@ -70,12 +68,6 @@
         padding-top: 55px;
     }
 
-    .flexCenter{
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-}
-
     footer {
         margin-top: auto;
         width: 100%;
@@ -92,12 +84,19 @@
         margin: 24px;
     }
 
-    :deep(.el-table .cell){
+    :deep(.el-table .cell) {
         padding-left: 45px;
     }
 
     :deep(.el-table__row) {
         height: 60px;
+    }
+
+    @media screen and (max-width: 768px) {
+        :deep(.el-table .cell) {
+            padding-left: 15px;
+            padding-right: 10px;
+        }
     }
 
 

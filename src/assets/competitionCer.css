@@ -81,22 +81,28 @@
 
 .nickname {
     font-size: 35px;
-    width: 50%;
     text-indent: 2em;
 }
 
 .rank{
     font-size: 60px;
     text-align: center;
-    padding: 50px;
-    padding-top: 60px;
+    padding: 55px;
+    padding-top: 70px;
 }
 
 .comp-title{
+    text-indent: 3em;
     font-size: 25px;
-    margin-top: 20px;
+    margin-top: 14px;
+    line-height: 40px;
 }
 
+.total{
+    font-size: 20px;
+    position: absolute;
+    bottom: 20px;
+}
 
 .right .top {
     width: 340px;

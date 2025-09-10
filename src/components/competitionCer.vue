@@ -1,6 +1,7 @@
 <template>
     <div class="container" v-Loading="Loading" element-loading-background="var(--bg-color)">
-        <div v-if="competitions.length == 0" style="color: var(--font-color);">You haven't joined this competition.</div>
+        <div v-if="competitions.length == 0" style="color: var(--font-color);">You haven't joined this competition.
+        </div>
         <div v-for="(comp, index) in competitions" :key="index">
             <div class="certificate-container">
                 <div class="certificate-body">
@@ -12,13 +13,14 @@
 
                         <div class="user">
                             <p>恭喜 / Congratulation</p>
-                            <div class="nickname">{{ comp.nickname }}</div>
+                            <div class="nickname">{{ comp.realName || comp.nickname }}</div>
                             <p>获得 / Acquire</p>
+                            <div class="comp-title">{{ comp.title }}</div>
                             <div class="rank">第 {{ comp.rank }} 名</div>
                         </div>
 
-                        <div class="comp-title">{{ comp.title }}</div>
 
+                        <div class="total">Total <strong>{{ comp.total }}</strong></div>
                     </div>
 
                     <div class="footer">
@@ -118,10 +120,13 @@
                             title: item.competition.title,
                             rank: item.rank,
                             date: item.date,
-                            nickname: data.username
+                            nickname: data.username,
+                            realName: "",
+                            total: ""
                         });
                     }
                 });
+                await getTotalParticipants();
             } else {
                 competitions.value = undefined;
             }
@@ -130,12 +135,26 @@
         }
     }
 
+    async function getTotalParticipants() {
+        try {
+            const data = await req.post("/getPublicCompetitionParticipants", { competitionId });
+            const userRow = data.rows.find(item => item.userId === userId.value);
+            if (userRow) {
+                const comp = competitions.value.find(c => c.competitionId === competitionId);
+                if (comp) {
+                    comp.realName = userRow.info.realName || userRow.info.subname;
+                    comp.total = data.count;
+                }
+            }
+        } catch (err) {
+            console.error("参赛人员名单获取失败", err);
+        }
+    }
+
     // 管理员查看
     async function getCompetitionDetail() {
         try {
-            const data = await req.post("/getCompetitionDetail", {
-                competitionId: competitionId
-            });
+            const data = await req.post("/getCompetitionDetail", { competitionId });
             compTitle.value = data.title;
             compDate.value = data.startAt.slice(0, 10);
         } catch (err) {
@@ -143,25 +162,31 @@
         }
     }
 
-    async function getCompetitionRanklist() {
+    async function loadCompetitionData() {
         try {
-            const data = await req.post("/getCompetitionRanklist", {
-                competitionId: competitionId
+            const [ranklistRes, participantsRes] = await Promise.all([
+                req.post("/getCompetitionRanklist", { competitionId }),
+                req.post("/getPublicCompetitionParticipants", { competitionId })
+            ]);
+
+            const realNameMap = {};
+            participantsRes.rows.forEach(item => {
+                realNameMap[item.userId] = item.info.realName || item.info.subname || "";
             });
-            competitions.value = [];
-            data.rows.forEach((item) => {
-                competitions.value.push({
-                    rank: item.rank,
-                    nickname: item.user.nickname,
-                    title: compTitle.value,
-                    date: compDate.value,
-                });
-            });
+
+            competitions.value = ranklistRes.rows.map(item => ({
+                rank: item.rank,
+                nickname: item.user.nickname,
+                userId: item.user.userId,
+                title: compTitle.value,
+                date: compDate.value,
+                total: ranklistRes.count,
+                realName: realNameMap[item.user.userId]
+            }));
         } catch (err) {
-            console.error("获取比赛榜单失败", err);
+            console.error("获取比赛数据失败", err);
         }
     }
-
 
     onMounted(async () => {
         Loading.value = true;
@@ -173,9 +198,9 @@
         } else {
             isLogin.value = true;
         }
-        if (permission.value != 0) {
+        if (permission.value == 3) {
             await getCompetitionDetail();
-            await getCompetitionRanklist();
+            await loadCompetitionData();
         } else {
             await getUserDetail();
         }
@@ -184,10 +209,12 @@
 
     const emit = defineEmits()
 
-    watch([isLogin, competitions], () => {
+    watch([isLogin, competitions, compTitle], () => {
         emit("updateData", {
             isLogin: isLogin.value,
             nickname: competitions.value.map(a => a.nickname),
+            realName: competitions.value.map(a => a.realName),
+            title: compTitle.value || competitions.value[0]?.title,
         })
     }, { immediate: true }) 
 </script>

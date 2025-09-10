@@ -32,7 +32,7 @@
                                 </svg>
                             </span>
                             <template #dropdown>
-                                <dropdown :certificateRef="certificateRef" :nickname="props.nickname"/>
+                                <dropdown :certificateRef="certificateRef" :nickname="nickname" :realName="realName" :title="title"/>
                             </template>
                         </el-dropdown>
 
@@ -55,6 +55,8 @@
     const props = defineProps({
         certificateRef: Object,
         nickname: Array,
+        realName: Array,
+        title: String,
     });
 
     function handleClickOutside(e) {
