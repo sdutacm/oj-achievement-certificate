@@ -1,8 +1,8 @@
 <template>
-    <div class="container" v-Loading="Loading" element-loading-background="var(--bg-color)">
+    <div class="container" >
         <div v-if="competitions.length == 0" style="color: var(--font-color);">You haven't joined this competition.
         </div>
-        <div v-for="(comp, index) in competitions" :key="index">
+        <div v-else v-for="(comp, index) in competitions" :key="index">
             <div class="certificate-container">
                 <div class="certificate-body">
                     <div class="content">
@@ -94,8 +94,8 @@
     async function ojLogin() {
         try {
             const res = await req.post("/login", {
-                loginName: '3214984261@qq.com',
-                password: 'QWERzxcv123456'
+                loginName: undefined,
+                password: undefined
             });
             console.log("模拟登录成功:", res);
             return true;
@@ -175,6 +175,7 @@
             });
 
             competitions.value = ranklistRes.rows.map(item => ({
+                competitionId: competitionId,
                 rank: item.rank,
                 nickname: item.user.nickname,
                 userId: item.user.userId,
@@ -209,12 +210,15 @@
 
     const emit = defineEmits()
 
-    watch([isLogin, competitions, compTitle], () => {
+    watch([isLogin, competitions, compTitle, permission, Loading], () => {
         emit("updateData", {
             isLogin: isLogin.value,
             nickname: competitions.value.map(a => a.nickname),
             realName: competitions.value.map(a => a.realName),
             title: compTitle.value || competitions.value[0]?.title,
+            competitions: competitions.value,
+            permission: permission.value,
+            Loading: Loading.value,
         })
     }, { immediate: true }) 
 </script>
