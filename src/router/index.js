@@ -3,6 +3,8 @@ import Home from '@/views/Home.vue'
 import Achievement from '@/views/Achievement.vue'
 import Competition from '@/views/Competition.vue'
 import competitionList from '@/views/competitionList.vue'
+import Sets from '@/views/Sets.vue'
+import setList from '@/views/setList.vue'
 
 
 const routes = [
@@ -26,7 +28,18 @@ const routes = [
         path: '/competitions',
         name: 'Competitions',
         component: competitionList,
-    }
+    },
+    {
+        path: '/set/:setId',
+        name: 'Set',
+        component: Sets,
+        prop: true,
+    },
+    {
+        path: '/sets',
+        name: 'sets',
+        component: setList,
+    },
 ]
 
 const router = createRouter({

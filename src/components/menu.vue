@@ -11,7 +11,7 @@
             </div>
             <div class="title" v-if="route.name === 'Achievement'">SDUT OJ Achievement Certificate</div>
             <div class="title" v-if="route.name === 'Competition'">SDUT OJ Competition Certificate</div>
-            <div class="title" v-if="route.name === 'Sets'">SDUT OJ Sets Certificate</div>
+            <div class="title" v-if="route.name === 'Set'">SDUT OJ Sets Certificate</div>
             <div class="menu-button">
                 <div class="github">
                     <a href="https://github.com/sdutacm/oj-achievement-certificate" target="_blank">
