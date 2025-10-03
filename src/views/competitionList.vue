@@ -1,11 +1,13 @@
 <template>
     <div class="AppContainer">
         <Menu />
-        <el-table v-Loading="Loading" v-show="!Loading" element-loading-background="var(--bg-color)"
-            :data="competitions" :show-header="false" @row-click="handleRowClick">
+        <el-table v-if="!Loading" :data="competitions" :show-header="false" @row-click="handleRowClick">
             <el-table-column prop="title" />
             <el-table-column prop="date" class-name="time" :width="columnWidth" />
         </el-table>
+        
+        <div class="load" v-Loading="Loading" element-loading-background="var(--bg-color)" v-if="Loading">
+        </div>
         <footer>© 2008-2025 SDUTACM. All Rights Reserved.</footer>
     </div>
 
@@ -45,11 +47,11 @@
 
     onMounted(async () => {
         Loading.value = true;
-        await getCompetitionList();
         columnWidth.value = window.innerWidth < 768 ? 110 : 180
         window.addEventListener('resize', () => {
             columnWidth.value = window.innerWidth < 768 ? 110 : 180
         })
+        await getCompetitionList();
         Loading.value = false;
     })
 </script>
@@ -77,6 +79,11 @@
         font-size: 14px;
         line-height: 50px;
         text-align: center;
+    }
+
+    .load {
+        width: 80%;
+        flex: 1;
     }
 
     .el-table {

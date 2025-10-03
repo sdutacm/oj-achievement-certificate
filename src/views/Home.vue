@@ -19,7 +19,7 @@
 
 <script setup>
     import Menu from '@/components/menu.vue';
-    import homeBtn from '@/components/home-btn.vue';
+    import homeBtn from '@/components/homeBtn.vue';
     
     const version = import.meta.env.VITE_APP_VERSION;
 </script>

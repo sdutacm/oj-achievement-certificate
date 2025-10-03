@@ -1,11 +1,13 @@
 <template>
     <div class="AppContainer">
         <Menu />
-        <el-table v-Loading="Loading" v-show="!Loading" element-loading-background="var(--bg-color)" :data="sets"
-            :show-header="false" @row-click="handleRowClick">
+        <el-table :data="sets" :show-header="false" v-if="!Loading" @row-click="handleRowClick">
             <el-table-column prop="title" />
             <el-table-column prop="date" class-name="time" :width="columnWidth" />
         </el-table>
+        <div class="load" v-Loading="Loading" element-loading-background="var(--bg-color)" v-if="Loading">
+        </div>
+
         <footer>© 2008-2025 SDUTACM. All Rights Reserved.</footer>
     </div>
 </template>
@@ -21,7 +23,7 @@
 
     async function getSetList() {
         try {
-            const data = await req.post("/getSetList", { "page": 1, "order": [["setId", "DESC"]], "limit": 20 });
+            const data = await req.post("/getSetList",{"page":1,"order":[["setId","DESC"]],"limit":20});
             if (data.rows) {
                 data.rows.forEach((item) => {
                     sets.value.push({
@@ -45,11 +47,11 @@
 
     onMounted(async () => {
         Loading.value = true;
-        await getSetList();
         columnWidth.value = window.innerWidth < 768 ? 110 : 180
         window.addEventListener('resize', () => {
             columnWidth.value = window.innerWidth < 768 ? 110 : 180
         })
+        await getSetList();
         Loading.value = false;
     })
 </script>
@@ -77,6 +79,10 @@
         font-size: 14px;
         line-height: 50px;
         text-align: center;
+    }
+
+    .load {
+        flex: 1;
     }
 
     .el-table {
