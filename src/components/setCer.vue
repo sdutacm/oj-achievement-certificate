@@ -6,7 +6,7 @@
                 <el-option v-for="group in Groups" :key="group.groupId" :label="group.name" :value="group.groupId" />
             </el-select>
             <span></span>
-            <el-button type="primary" round @click="showCertificates">Show All</el-button>
+            <el-button type="primary" round @click="showCertificates" :loading="btnLoading" >Show All</el-button>
         </div>
         <div v-if="permission !== 3 || showCert" class="Cert">
             <div v-for="(item, index) in sets" :key="index" >
@@ -78,6 +78,7 @@
     const selectedGroupId = ref([]);
     const showCert = ref(false);
     const title = ref("");
+    const btnLoading = ref(false);
 
 
     const props = defineProps({
@@ -91,14 +92,14 @@
         const params = new URLSearchParams(window.location.search)
         Logo.value = params.get('logo') || 'default'
     }
-
+    let currentNickname;
     async function checkSession() {
         try {
             const data = await req.get("/getSession");
             if (data) {
                 userId.value = data.userId;
-                sets.value.nickname = data.nickname;
                 permission.value = data.permission;
+                currentNickname = data.nickname;
                 console.log(userId.value);
                 return true;
             }
@@ -111,8 +112,8 @@
     async function ojLogin() {
         try {
             const res = await req.post("/login", {
-                loginName: undefined,
-                password: undefined,
+                loginName: "acm_admin",
+                password: "A5C0M6&sdut__oj",
             });
             console.log("模拟登录成功", res);
             return true;
@@ -122,6 +123,7 @@
         }
     }
     // 获取题目集的所有题目
+    let userPass;
     async function getProblemData() {
         try {
             const SetDetail = await req.post("/getSetDetail", { setId })
@@ -133,7 +135,7 @@
             });
             total.value = allProblemsIds.value.length;
             title.value = SetDetail.title;
-            sets.value.passCount = getUserPassCount(userId.value);
+            userPass = await getUserPassCount(userId.value);
             return true;
         } catch (err) {
             console.error("获取题目列表失败", err);
@@ -201,7 +203,9 @@
 
     // 点击 btn 调用
     async function showCertificates() {
-        const selectedGroups = Groups.value.filter(g =>
+        btnLoading.value = true;
+        try{
+            const selectedGroups = Groups.value.filter(g =>
             selectedGroupId.value.includes(g.groupId)
         );
 
@@ -223,7 +227,13 @@
         }
         console.log(results);
         sets.value = results;
-        showCert.value = true;
+        }catch (err) {
+            console.error("生成证书失败", err);
+        }finally{
+            showCert.value = true;
+            btnLoading.value = false;
+        }
+        
     }
 
 
@@ -239,19 +249,28 @@
         }
         await getProblemData();
         await getGroupMembers();
+        if(permission.value !== 3){
+            sets.value = [{
+                userId: userId.value,
+                passCount: userPass,
+                nickname: currentNickname,
+            }]
+        }
         Loading.value = false;
     });
 
 
     const emit = defineEmits();
 
-    watch([isLogin, sets, Loading, total, permission, Groups], () => {
+    watch([isLogin, sets, Loading, total, permission, title], () => {
         emit("updateData", {
             isLogin: isLogin.value,
             sets: sets.value,
             Loading: Loading.value,
             permission: permission.value,
-            Groups: Groups.value,
+            total: total.value,
+            nickname: sets.value.map(a => a.nickname),
+            title: title.value,
         })
     }, { immediate: true })
 

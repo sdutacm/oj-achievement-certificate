@@ -1,6 +1,6 @@
 <template>
     <div class="AppContainer">
-        <Menu />
+        <Menu :certificateRef="certificateRef" :nickname="certificateData.nickname" :title="certificateData.title"/>
         <fallback v-if="certificateData.isLogin === false" class="flexCenter" />
         <certificate ref="certificateRef" class="certificate flexCenter" v-Loading="certificateData.Loading"
             element-loading-background="var(--bg-color)" :setId="setId" @updateData="handleUpdate"
@@ -19,6 +19,7 @@
     const route = useRoute();
     const setId = route.params.setId;
     const isMobile = ref(false);
+    const certificateRef = ref(null);
 
 
     onMounted(() => {
@@ -33,6 +34,9 @@
         sets: [],
         isLogin: false,
         permission: 0,
+        total: 0,
+        nickname: [],
+        title: "",
     })
 
     function handleUpdate(payload) {

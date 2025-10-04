@@ -35,6 +35,7 @@
 
     const { certificateRef } = toRefs(props);
 
+
     async function captureCertificate() {
         const target = certificateRef.value?.$el || certificateRef.value;
         if (!target) return;
@@ -70,6 +71,7 @@
         return canvases;
     }
 
+
     async function downloadAsPNG() {
         const canvases = await captureCertificate();
         if (!canvases) return;
@@ -87,13 +89,14 @@
             canvases.forEach((canvas, index) => {
                 const imgData = canvas.toDataURL("image/png");
                 const base64Data = imgData.split(",")[1];
-                zip.file(`${props.title}-${index+1}-${props.realName[index]}.png`, base64Data, { base64: true });
+                zip.file(`${props.title}-${index+1}-${props.realName?.[index]?props.realName[index]:props.nickname?.[index]}.png`, base64Data, { base64: true });
             });
 
             const content = await zip.generateAsync({ type: "blob" });
             saveAs(content, `${props.title}.zip`);
         }
     }
+
 
     async function downloadAsPDF() {
         const canvases = await captureCertificate();
@@ -123,7 +126,7 @@
                 const imgData = canvases[i].toDataURL("image/png");
                 pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
                 const pdfBlob = pdf.output("blob");
-                zip.file(`${props.title}-${i+1}-${props.realName[i]}.pdf`, pdfBlob);
+                zip.file(`${props.title}-${i+1}-${props.realName?.[i]?props.realName[i]:props.nickname?.[i]}.pdf`, pdfBlob);
             }
 
             const content = await zip.generateAsync({ type: "blob" });
