@@ -6,8 +6,17 @@
             element-loading-background="var(--bg-color)" :setId="setId" @updateData="handleUpdate"
             v-show="certificateData.isLogin && !isMobile" />
 
+        <Media class="flexCenter" v-show="certificateData.isLogin && isMobile" :permission="certificateData.permission" :total="certificateData.total"
+        :sets="certificateData.sets" :title="certificateData.title" v-Loading="certificateData.Loading" element-loading-background="var(--bg-color)"/>
         <footer>© 2008-2025 SDUTACM. All Rights Reserved.</footer>
     </div>
+
+    <Teleport to="body">
+        <div id="hidden-certificate-container"
+            style="position: absolute; left: -9999px; top: -9999px; pointer-events: none;">
+            <certificate ref="hiddenCertificateRef" class="certificate" :setId="setId"  @updateData="handleUpdate" />
+        </div>
+    </Teleport>
 </template>
 
 <script setup>
@@ -16,6 +25,7 @@
     import Menu from '@/components/menu.vue';
     import certificate from '@/components/setCer.vue';
     import { useRoute } from "vue-router";
+    import Media from '@/components/setsMedia.vue'
     const route = useRoute();
     const setId = route.params.setId;
     const isMobile = ref(false);

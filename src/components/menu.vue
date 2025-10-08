@@ -21,7 +21,7 @@
                         </svg>
                     </a>
                 </div>
-                <div class="download" ref="menuWrapper" v-if="route.name !== 'Home'&& route.name != 'Competitions'">
+                <div class="download" ref="menuWrapper" v-if="route.name !== 'Home'&& route.name != 'Competitions'&& route.name != 'sets'">
                     <div name="dropdown">
                         <el-dropdown>
                             <span class="el-dropdown-link">

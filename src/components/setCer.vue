@@ -8,7 +8,7 @@
             <span></span>
             <el-button type="primary" round @click="showCertificates" :loading="btnLoading" >Show All</el-button>
         </div>
-        <div v-if="permission !== 3 || showCert" class="Cert">
+        <div v-if="permission !== 3 || showCert" class="Cert" :class="{'top-margin':permission===3}">
             <div v-for="(item, index) in sets" :key="index" >
             <div class="certificate-container">
                 <div class="certificate-body">
@@ -30,7 +30,7 @@
                     <div class="footer">
                         <div class="certificate-information">
                             Date: <strong>{{ IssueDate }}</strong><br />
-                            Certificate ID: <strong>{{ CertificateID }}</strong>
+                            Certificate ID: <strong>{{ CertificateID }}{{ index }}</strong>
                         </div>
                     </div>
 
@@ -112,8 +112,8 @@
     async function ojLogin() {
         try {
             const res = await req.post("/login", {
-                loginName: "acm_admin",
-                password: "A5C0M6&sdut__oj",
+                loginName: undefined,
+                password: undefined,
             });
             console.log("模拟登录成功", res);
             return true;
