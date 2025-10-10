@@ -3,7 +3,6 @@
         <Menu :certificateRef="certificateRef" />
         <fallback v-if="certificateData.isLogin === false" class="flexCenter"/>
         <certificate ref="certificateRef" class="certificate flexCenter" @updateData="handleUpdate" v-show="!isMobile && certificateData.isLogin" />
-        <!-- 移动端 -->
 
         <media class="media flexCenter"  v-show="isMobile && certificateData.isLogin" :nickname="certificateData.nickname"
             :totalAchievements="certificateData.totalAchievements" :goldCount="certificateData.goldCount"
@@ -12,7 +11,6 @@
         <footer >© 2008-2025 SDUTACM. All Rights Reserved.</footer>
     </div>
     
-    <!-- 将组件传送到隐藏容器 -->
     <Teleport to="body">
         <div id="hidden-certificate-container" style="position: absolute; left: -9999px; top: -9999px; pointer-events: none;">
             <certificate ref="hiddenCertificateRef" class="certificate" @updateData="handleUpdate" />

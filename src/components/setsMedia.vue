@@ -38,8 +38,8 @@
         permission: Number,
         title: String,
     });
-    
-        import html2canvas from "html2canvas";
+
+    import html2canvas from "html2canvas";
     import { jsPDF } from "jspdf";
     import { toRefs } from "vue";
 
@@ -129,65 +129,65 @@
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--font-color);
-    fill: var(--font-color);
-}
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--font-color);
+        fill: var(--font-color);
+    }
 
-.user {
-    font-size: 20px;
-    font-weight: 600;
-    padding: 15px;
-    display: flex;
-    justify-content: center;
-}
+    .user {
+        font-size: 20px;
+        font-weight: 600;
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+    }
 
-.competition-information{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    .competition-information {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.count{
-    font-size: 20px;
-    padding: 15px;
-}
+    .count {
+        font-size: 20px;
+        padding: 15px;
+    }
 
-.title{
-    width: 75%;
-    line-height: 20px;
-    text-align: center;
-    padding: 20px;
-}
+    .title {
+        width: 85%;
+        line-height: 20px;
+        text-align: center;
+        padding: 20px;
+    }
 
-.btn{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    .btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.downBtn {
-    padding: 15px 20px;
-    margin: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: var(--btn-bg);
-    box-shadow: 0 0 2px var(--box-shadow-color);
-    border-radius: 8px;
-}
+    .downBtn {
+        padding: 15px 20px;
+        margin: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: var(--btn-bg);
+        box-shadow: 0 0 2px var(--box-shadow-color);
+        border-radius: 8px;
+    }
 
-.downBtn:active {
-    transform: scale(0.98);
-    /* background-color: #f5f5f5; */
-    color: #40a9ff;
-    fill: #40a9ff;
-}
+    .downBtn:active {
+        transform: scale(0.98);
+        /* background-color: #f5f5f5; */
+        color: #40a9ff;
+        fill: #40a9ff;
+    }
 </style>

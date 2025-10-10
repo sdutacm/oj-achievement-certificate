@@ -1,3 +1,8 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
 .AppContainer {
     -webkit-user-select: none;
     user-select: none;
@@ -12,12 +17,35 @@
     padding-top: 55px;
 }
 
-.flexCenter{
-    display: flex;
+.flexCenter {
     flex: 1;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+}
+
+.back{
+    position: absolute;
+    left: 15px;
+    padding: 20px;
+    line-height: 24px;
+    display: flex;
+    z-index: 10;
+    transition: all .3s;
+
+}
+
+.back svg{
+    fill: var(--font-color);
+    transition: all .3s;
+}
+
+.back:hover{
+    color: #40a9ff;
+}
+
+.back:hover svg{
+    fill: #40a9ff;
 }
 
 
@@ -36,5 +64,8 @@ footer {
 @media screen and (max-width: 768px) {
     footer {
         font-size: 10px;
+    }
+    .back{
+        font-size: 14px;
     }
 }

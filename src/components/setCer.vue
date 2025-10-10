@@ -112,8 +112,8 @@
     async function ojLogin() {
         try {
             const res = await req.post("/login", {
-                loginName: undefined,
-                password: undefined,
+                loginName: "1816140905@qq.com",
+                password: "wzhzjq2xx",
             });
             console.log("模拟登录成功", res);
             return true;

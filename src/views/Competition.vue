@@ -2,6 +2,11 @@
     <div class="AppContainer">
         <Menu :certificateRef="certificateRef" :realName="certificateData.realName" :title="certificateData.title"
             :nickname="certificateData.nickname" />
+        <div class="back" @click="router.push('/competitions')" v-show="!certificateData.Loading">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+            </svg><span>back</span>
+        </div>
         <fallback v-if="certificateData.isLogin === false" class="flexCenter" />
         <certificate ref="certificateRef" class="certificate flexCenter" v-show="certificateData.isLogin && !isMobile"
             @updateData="handleUpdate" :competitionId="competitionId" v-Loading="certificateData.Loading" element-loading-background="var(--bg-color)"/>
@@ -24,13 +29,14 @@
     import certificate from '@/components/competitionCer.vue';
     import Menu from '@/components/menu.vue';
     import fallback from "@/components/fallback.vue";
-    import { useRoute } from "vue-router";
+    import { useRoute, useRouter } from "vue-router";
     import media from '@/components/competitionMedia.vue';
     const route = useRoute();
     const certificateRef = ref(null);
     const isMobile = ref(false);
     const hiddenCertificateRef = ref(null);
     const competitionId = route.params.competitionId;
+    const router = useRouter();
 
     onMounted(() => {
         isMobile.value = window.innerWidth <= 768

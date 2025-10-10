@@ -16,8 +16,32 @@
     flex: 1;
     align-items: center;
     justify-content: center;
+    /* padding: 45px; */
 }
 
+.back{
+    position: absolute;
+    left: 15px;
+    padding: 20px;
+    line-height: 24px;
+    display: flex;
+    z-index: 10;
+    transition: all .3s;
+
+}
+
+.back svg{
+    fill: var(--font-color);
+    transition: all .3s;
+}
+
+.back:hover{
+    color: #40a9ff;
+}
+
+.back:hover svg{
+    fill: #40a9ff;
+}
 
 footer {
     margin-top: auto;
@@ -34,5 +58,8 @@ footer {
 @media screen and (max-width: 768px) {
     footer {
         font-size: 10px;
+    }
+    .back{
+        font-size: 14px;
     }
 }

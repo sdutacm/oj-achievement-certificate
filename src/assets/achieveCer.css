@@ -215,21 +215,21 @@
     margin-right: 35px;
 }
 
-.total-achieved-rophy-board{
+.total-achieved-trophy-board{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
 
-.total-achieved-rophy{
+.total-achieved-trophy{
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 16px;
 }
 
-.rophy-count{
+.trophy-count{
     font-size: 18px;
     font-weight: bold;
     margin-left: 8px;

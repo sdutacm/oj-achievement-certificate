@@ -16,11 +16,11 @@
                             <div class="nickname">{{ comp.realName || comp.nickname }}</div>
                             <p>获得 / Acquire</p>
                             <div class="comp-title">{{ comp.title }}</div>
-                            <div class="rank">第 {{ comp.rank }} 名</div>
+                            <div class="rank">第 {{ comp.rank }}/{{ comp.total }} 名</div>
                         </div>
 
 
-                        <div class="total">Total <strong>{{ comp.total }}</strong></div>
+                        <!-- <div class="total">Total <strong>{{ comp.total }}</strong></div> -->
                     </div>
 
                     <div class="footer">
