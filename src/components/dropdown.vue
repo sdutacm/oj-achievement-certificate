@@ -28,9 +28,10 @@
     const route = useRoute();
     const props = defineProps({
         certificateRef: Object,
-        nickname: Array,
+        nickname: Array || String,
         realName: Array,
         title: String,
+        permission: Number,
     });
 
     const { certificateRef } = toRefs(props);
@@ -76,11 +77,11 @@
         const canvases = await captureCertificate();
         if (!canvases) return;
 
-        if (route.name === "Achievement") {
+        if (route.name === "Achievement" || props.permission === 0) {
             canvases.forEach((canvas, index) => {
                 const link = document.createElement("a");
                 link.href = canvas.toDataURL("image/png");
-                link.download = `certificate-${index + 1}.png`;
+                link.download = `certificate-${props.nickname}.png`;
                 link.click();
             });
         } else {
@@ -102,7 +103,7 @@
         const canvases = await captureCertificate();
         if (!canvases) return;
 
-        if (route.name === "Achievement") {
+        if (route.name === "Achievement" || props.permission === 0) {
             const pdf = new jsPDF("l", "mm", "a4");
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
@@ -114,7 +115,7 @@
                 const imgData = canvas.toDataURL("image/png");
                 pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
             });
-            pdf.save("certificate.pdf");
+            pdf.save(`certificate-${props.nickname}.pdf`);
         } else {
             const zip = new JSZip();
 

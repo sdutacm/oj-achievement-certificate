@@ -4,12 +4,11 @@
         <div class="container">
             <div class="title">
                 <h1>OJ Certificate</h1>
-                <p class="verson">{{ version }}</p>
+                <p class="version">{{ version }}</p>
             </div>
-            <h2>GetStart</h2>
+            <h2>Get Started</h2>
             <p>Select the type of certificate you want to obtain</p>
             <homeBtn />
-            <p class="more">More features are under development, so stay tuned... 😊</p>
         </div>
 
         <footer>© 2008-2025 SDUTACM. All Rights Reserved.</footer>

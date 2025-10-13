@@ -1,6 +1,6 @@
 <template>
     <div class="AppContainer" >
-        <Menu :certificateRef="certificateRef" />
+        <Menu :certificateRef="certificateRef" :isLogin="certificateData.isLogin" :nickname="certificateData.nickname" />
         <fallback v-if="certificateData.isLogin === false" class="flexCenter"/>
         <certificate ref="certificateRef" class="certificate flexCenter" @updateData="handleUpdate" v-show="!isMobile && certificateData.isLogin" />
 

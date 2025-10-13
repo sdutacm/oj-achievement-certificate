@@ -32,7 +32,7 @@
     display: flex;
     z-index: 10;
     transition: all .3s;
-
+    color: var(--font-color);
 }
 
 .back svg{

@@ -112,8 +112,8 @@
     async function ojLogin() {
         try {
             const res = await req.post("/login", {
-                loginName: "1816140905@qq.com",
-                password: "wzhzjq2xx",
+                loginName: "acm_admin",
+                password: "A5C0M6&sdut__oj",
             });
             console.log("模拟登录成功", res);
             return true;

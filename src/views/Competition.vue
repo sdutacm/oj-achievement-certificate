@@ -1,7 +1,7 @@
 <template>
     <div class="AppContainer">
         <Menu :certificateRef="certificateRef" :realName="certificateData.realName" :title="certificateData.title"
-            :nickname="certificateData.nickname" />
+            :nickname="certificateData.nickname" :isLogin="certificateData.isLogin" :competitions="certificateData.competitions" :permission="certificateData.permission" />
         <div class="back" @click="router.push('/competitions')" v-show="!certificateData.Loading">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                 <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />

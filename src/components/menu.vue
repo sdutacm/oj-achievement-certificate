@@ -12,6 +12,8 @@
             <div class="title" v-if="route.name === 'Achievement'">SDUT OJ Achievement Certificate</div>
             <div class="title" v-if="route.name === 'Competition'">SDUT OJ Competition Certificate</div>
             <div class="title" v-if="route.name === 'Set'">SDUT OJ Sets Certificate</div>
+            <div class="title" v-if="route.name === 'Competitions'">SDUT OJ Competitions</div>
+            <div class="title" v-if="route.name === 'sets'">SDUT OJ Sets</div>
             <div class="menu-button">
                 <div class="github">
                     <a href="https://github.com/sdutacm/oj-achievement-certificate" target="_blank">
@@ -21,7 +23,8 @@
                         </svg>
                     </a>
                 </div>
-                <div class="download" ref="menuWrapper" v-if="route.name !== 'Home'&& route.name != 'Competitions'&& route.name != 'sets'">
+                <div class="download" ref="menuWrapper"
+                    v-if="route.name !== 'Home' && route.name != 'Competitions' && route.name != 'sets' && props.isLogin && join">
                     <div name="dropdown">
                         <el-dropdown>
                             <span class="el-dropdown-link">
@@ -32,7 +35,8 @@
                                 </svg>
                             </span>
                             <template #dropdown>
-                                <dropdown :certificateRef="certificateRef" :nickname="nickname" :realName="realName" :title="title"/>
+                                <dropdown :certificateRef="certificateRef" :nickname="nickname" :realName="realName"
+                                    :title="title" :permission="permission" />
                             </template>
                         </el-dropdown>
 
@@ -45,20 +49,35 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onBeforeUnmount } from 'vue'
+    import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
     import dropdown from "@/components/dropdown.vue"
     import { useRoute } from 'vue-router'
 
     const route = useRoute();
     const showDownloadModal = ref(false);
     const menuWrapper = ref(null);
+    const join = ref(true);
     const props = defineProps({
         certificateRef: Object,
-        nickname: Array,
+        nickname: Array || String,
         realName: Array,
         title: String,
+        isLogin: Boolean,
+        competitions: Array,
+        permission: Number,
     });
 
+    watch(
+        () => props.competitions,
+        (newVal) => {
+            if (route.name === 'Competition' && (!newVal || newVal.length === 0)) {
+                join.value = false;
+            } else {
+                join.value = true;
+            }
+        },
+        { immediate: true }
+    );
     function handleClickOutside(e) {
         if (menuWrapper.value && !menuWrapper.value.contains(e.target)) {
             showDownloadModal.value = false
