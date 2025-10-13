@@ -112,8 +112,8 @@
     async function ojLogin() {
         try {
             const res = await req.post("/login", {
-                loginName: "acm_admin",
-                password: "A5C0M6&sdut__oj",
+                loginName: undefined,
+                password: undefined,
             });
             console.log("模拟登录成功", res);
             return true;
@@ -227,6 +227,7 @@
         }
         console.log(results);
         sets.value = results;
+        emit('updateDownloadVisible', true);
         }catch (err) {
             console.error("生成证书失败", err);
         }finally{
@@ -255,6 +256,8 @@
                 passCount: userPass,
                 nickname: currentNickname,
             }]
+        }else{
+            emit('updateDownloadVisible', false);
         }
         Loading.value = false;
     });

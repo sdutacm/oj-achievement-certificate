@@ -23,8 +23,7 @@
                         </svg>
                     </a>
                 </div>
-                <div class="download" ref="menuWrapper"
-                    v-if="route.name !== 'Home' && route.name != 'Competitions' && route.name != 'sets' && props.isLogin && join">
+                <div class="download" ref="menuWrapper" v-if="shouldShowDownloadButton">
                     <div name="dropdown">
                         <el-dropdown>
                             <span class="el-dropdown-link">
@@ -49,7 +48,7 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+    import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
     import dropdown from "@/components/dropdown.vue"
     import { useRoute } from 'vue-router'
 
@@ -65,6 +64,7 @@
         isLogin: Boolean,
         competitions: Array,
         permission: Number,
+        showDownload: Boolean,
     });
 
     watch(
@@ -84,13 +84,33 @@
         }
     }
 
-
     onMounted(() => {
         document.addEventListener('click', handleClickOutside)
     })
 
     onBeforeUnmount(() => {
         document.removeEventListener('click', handleClickOutside)
+    })
+
+    const shouldShowDownloadButton = computed(() => {
+        const excludedRoutes = ['Home','Competitions','sets'];
+        if(excludedRoutes.includes(route.name)){
+            return false;
+        }
+
+        if(!props.isLogin){
+            return false;
+        }
+
+        if(route.name === 'Competition' && !join.value){
+            return false;
+        }
+
+        if(route.name === 'Set' && props.permission === 3){
+            return props.showDownload;
+        }
+
+        return true;
     })
 
 </script>

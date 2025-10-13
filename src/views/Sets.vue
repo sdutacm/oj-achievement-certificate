@@ -1,6 +1,7 @@
 <template>
     <div class="AppContainer">
-        <Menu :certificateRef="certificateRef" :nickname="certificateData.nickname" :title="certificateData.title" :isLogin="certificateData.isLogin" :permission="certificateData.permission"/>
+        <Menu :certificateRef="certificateRef" :nickname="certificateData.nickname" :title="certificateData.title"
+            :isLogin="certificateData.isLogin" :permission="certificateData.permission" :showDownload="showDownloadBtn"/>
         <div class="back" @click="router.push('/sets')" v-show="!certificateData.Loading">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                 <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
@@ -9,7 +10,7 @@
         <fallback v-if="certificateData.isLogin === false" class="flexCenter" />
         <certificate ref="certificateRef" class="certificate flexCenter" v-Loading="certificateData.Loading"
             element-loading-background="var(--bg-color)" :setId="setId" @updateData="handleUpdate"
-            v-show="certificateData.isLogin && !isMobile" />
+            v-show="certificateData.isLogin && !isMobile" @updateDownloadVisible="updateDownloadVisible" />
 
         <Media class="flexCenter" v-show="certificateData.isLogin && isMobile" :permission="certificateData.permission"
             :total="certificateData.total" :sets="certificateData.sets" :title="certificateData.title"
@@ -37,6 +38,7 @@
     const isMobile = ref(false);
     const certificateRef = ref(null);
     const router = useRouter();
+    const showDownloadBtn = ref(false);
 
 
     onMounted(() => {
@@ -45,6 +47,10 @@
             isMobile.value = window.innerWidth <= 768
         })
     })
+
+    const updateDownloadVisible = (visible) => {
+        showDownloadBtn.value = visible;
+    };
 
     const certificateData = reactive({
         Loading: true,
